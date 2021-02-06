@@ -6,7 +6,7 @@ The project is still in very early stage so bugs are expected. Feel free to rais
 
 ## Example 
 
-```
+```csharp
 using Cuipod;
 
 namespace CuipodExample
