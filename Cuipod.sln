@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuipod", "Cuipod\Cuipod.csproj", "{2B6AD5A5-F10B-4FC3-BF12-5DD26FAF3796}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CuipodExample", "CuipodExample\CuipodExample.csproj", "{BD343B0B-29EB-4498-8CD2-D9483B6BDA98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B6AD5A5-F10B-4FC3-BF12-5DD26FAF3796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B6AD5A5-F10B-4FC3-BF12-5DD26FAF3796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B6AD5A5-F10B-4FC3-BF12-5DD26FAF3796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B6AD5A5-F10B-4FC3-BF12-5DD26FAF3796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD343B0B-29EB-4498-8CD2-D9483B6BDA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD343B0B-29EB-4498-8CD2-D9483B6BDA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD343B0B-29EB-4498-8CD2-D9483B6BDA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD343B0B-29EB-4498-8CD2-D9483B6BDA98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2127615-5183-476F-8771-BF9710EB3B2C}
+	EndGlobalSection
+EndGlobal

@@ -1,13 +1,4 @@
-# cuipod
-Simple yet flexible framework for Gemini protocol servers
-
-Framework is written in C# and based on .NET Core 3.0 framework. 
-The project is still in very early stage so bugs are expected. Feel free to raise an issue ticket or even raise PR!
-
-## Example 
-
-```
-using Cuipod;
+﻿using Cuipod;
 
 namespace CuipodExample
 {
@@ -46,4 +37,3 @@ namespace CuipodExample
         }
     }
 }
-```
