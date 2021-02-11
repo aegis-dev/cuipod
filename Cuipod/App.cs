@@ -98,8 +98,7 @@ namespace Cuipod
         private Response ProcessRequest(SslStream sslStream)
         {
             sslStream.ReadTimeout = 5000;
-            sslStream.WriteTimeout = 5000;
-            sslStream.AuthenticateAsServer(_serverCertificate, false, SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12, false);
+            sslStream.AuthenticateAsServer(_serverCertificate, false, SslProtocols.Tls12 | SslProtocols.Tls13, false);
 
             // Read a message from the client.
             string rawURL = ReadRequest(sslStream);
@@ -136,7 +135,6 @@ namespace Cuipod
                 return response;
             }
             string domainName = url.Substring(0, domainNameDelimiter);
-            // TODO: validate domain name from cert?
 
             Request request = new Request("gemini://" + domainName , url.Substring(domainNameDelimiter));
             if (response.Status == StatusCode.Success)

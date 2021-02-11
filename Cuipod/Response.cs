@@ -37,11 +37,6 @@ namespace Cuipod
             _requestBody = hint + "\r\n";
         }
 
-        internal static string WriteHeader(StatusCode statusCode)
-        {
-            return ((int)statusCode).ToString() + " ";
-        }
-
         internal byte[] Encode()
         {
             string wholeResponse = ((int)Status).ToString() + " ";
@@ -51,7 +46,6 @@ namespace Cuipod
             }
 
             wholeResponse += _requestBody;
-            Console.WriteLine(wholeResponse);
             return Encoding.UTF8.GetBytes(wholeResponse);
         }
     }
