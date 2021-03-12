@@ -24,8 +24,7 @@ namespace Cuipod
         public App(string directoryToServe, string certificateFile, string privateRSAKeyFilePath)
         {
             _directoryToServe = directoryToServe;
-            IPAddress localAddress = IPAddress.Parse("127.0.0.1");
-            _listener = new TcpListener(localAddress, 1965);
+            _listener = new TcpListener(IPAddress.Any, 1965);
             _requestCallbacks = new Dictionary<string, RequestCallback>();
             _serverCertificate = CertificateUtils.LoadCertificate(certificateFile, privateRSAKeyFilePath);
         }
@@ -43,7 +42,7 @@ namespace Cuipod
         public int Run()
         {
             int status = 0;
-            Console.WriteLine("Serving capsule on 127.0.0.1:1965");
+            Console.WriteLine("Serving capsule on 0.0.0.0:1965");
             try
             {
                 _listener.Start();
