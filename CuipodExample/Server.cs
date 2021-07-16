@@ -31,21 +31,8 @@ namespace CuipodExample
                     return 1;
                 }
 
-                string pass;
-                if (pfxPassword != null)
-                {
-                    pass = pfxPassword.Value.ToString();
-                }
-                else
-                {
-                    pass = "";
-                }
-
-                Console.WriteLine("pass: " + pass.ToString());
-                Console.WriteLine("cert: " + certificateFile.Value.ToString());
-                
+                var pass = (pfxPassword != null)  ? pfxPassword.Value.ToString() : "";
                 var cert = new X509Certificate2(certificateFile.Value.ToString(), pass);
-
 
                 return AppMain(directoryToServe.Value, cert);
             });
