@@ -21,12 +21,22 @@ namespace Cuipod
 
         private RequestCallback _onBadRequestCallback;
 
+        //somewhat flaky implementation - probably deprecate it
         public App(string directoryToServe, string certificateFile, string privateRSAKeyFilePath)
         {
             _directoryToServe = directoryToServe;
             _listener = new TcpListener(IPAddress.Any, 1965);
             _requestCallbacks = new Dictionary<string, RequestCallback>();
             _serverCertificate = CertificateUtils.LoadCertificate(certificateFile, privateRSAKeyFilePath);
+        }
+
+        public App(string directoryToServe, X509Certificate2 certificate)
+        {
+
+            _directoryToServe = directoryToServe;
+            _listener = new TcpListener(IPAddress.Any, 1965);
+            _requestCallbacks = new Dictionary<string, RequestCallback>();
+            _serverCertificate = certificate;
         }
 
         public void OnRequest(string route, RequestCallback callback)

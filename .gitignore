@@ -352,3 +352,5 @@ MigrationBackup/
 CuipodExample/Properties/launchSettings.json
 
 .vscode/
+.hg/
+.hgignore

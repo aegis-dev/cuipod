@@ -1,6 +1,7 @@
 ﻿using Cuipod;
 using Microsoft.Extensions.CommandLineUtils;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CuipodExample
 {
@@ -15,21 +16,25 @@ namespace CuipodExample
                 "Directory to server (required)"
             );
             CommandArgument certificateFile = commandLineApplication.Argument(
-                "certificate",
+                "pfx certificate file",
                 "Path to certificate (required)"
             );
-            CommandArgument privateRSAKeyFilePath = commandLineApplication.Argument(
-               "key",
-               "Path to private Pkcs8 RSA key (required)"
+            CommandArgument pfxPassword = commandLineApplication.Argument(
+               "pfx password",
+               "pfx password"
             );
             commandLineApplication.OnExecute(() =>
             {
-                if (directoryToServe.Value == null || certificateFile.Value == null || privateRSAKeyFilePath.Value == null)
+                if (directoryToServe.Value == null || certificateFile.Value == null )
                 {
                     commandLineApplication.ShowHelp();
                     return 1;
                 }
-                return AppMain(directoryToServe.Value, certificateFile.Value, privateRSAKeyFilePath.Value);
+
+                var pass = (pfxPassword != null)  ? pfxPassword.Value.ToString() : "";
+                var cert = new X509Certificate2(certificateFile.Value.ToString(), pass);
+
+                return AppMain(directoryToServe.Value, cert);
             });
 
             try
@@ -42,12 +47,11 @@ namespace CuipodExample
             }
         }
 
-        private static int AppMain(string directoryToServe, string certificateFile, string privateRSAKeyFilePath)
+        private static int AppMain(string directoryToServe, X509Certificate2 certificate)
         {
             App app = new App(
                 directoryToServe,
-                certificateFile,
-                privateRSAKeyFilePath
+                certificate
             );
 
             // Serve files
