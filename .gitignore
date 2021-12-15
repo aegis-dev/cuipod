@@ -354,3 +354,5 @@ CuipodExample/Properties/launchSettings.json
 .vscode/
 .hg/
 .hgignore
+
+Cuipod/nuget.config

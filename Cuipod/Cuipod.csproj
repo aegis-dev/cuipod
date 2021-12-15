@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/aegis-dev/cuipod</PackageProjectUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/aegis-dev/cuipod</RepositoryUrl>
+    <PackageTags>gemini</PackageTags>
+    <Description>Simple yet flexible framework for Gemini protocol server</Description>
+    <Copyright>Copyright © 2021 Egidijus Lileika</Copyright>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
