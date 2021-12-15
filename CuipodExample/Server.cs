@@ -1,5 +1,6 @@
 ﻿using Cuipod;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Cryptography.X509Certificates;
 
@@ -11,30 +12,25 @@ namespace CuipodExample
         {
             CommandLineApplication commandLineApplication = new CommandLineApplication();
             commandLineApplication.HelpOption("-h | --help");
-            CommandArgument directoryToServe = commandLineApplication.Argument(
-                "directory",
-                "Directory to server (required)"
-            );
             CommandArgument certificateFile = commandLineApplication.Argument(
-                "pfx certificate file",
+                "certificate",
                 "Path to certificate (required)"
             );
-            CommandArgument pfxPassword = commandLineApplication.Argument(
-               "pfx password",
-               "pfx password"
+            CommandArgument privateRSAKeyFilePath = commandLineApplication.Argument(
+               "key",
+               "Path to private Pkcs8 RSA key (required)"
             );
             commandLineApplication.OnExecute(() =>
             {
-                if (directoryToServe.Value == null || certificateFile.Value == null )
+                if (certificateFile.Value == null || privateRSAKeyFilePath.Value == null)
                 {
                     commandLineApplication.ShowHelp();
                     return 1;
                 }
 
-                var pass = (pfxPassword != null)  ? pfxPassword.Value.ToString() : "";
-                var cert = new X509Certificate2(certificateFile.Value.ToString(), pass);
+                X509Certificate2 cert = CertificateUtils.LoadCertificate(certificateFile.Value, privateRSAKeyFilePath.Value);
 
-                return AppMain(directoryToServe.Value, cert);
+                return AppMain("pages/", cert);
             });
 
             try
@@ -49,18 +45,31 @@ namespace CuipodExample
 
         private static int AppMain(string directoryToServe, X509Certificate2 certificate)
         {
+            using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+                builder
+                .AddSimpleConsole(options =>
+                {
+                    options.SingleLine = true;
+                    options.TimestampFormat = "hh:mm:ss ";
+                })
+                .SetMinimumLevel(LogLevel.Debug)
+            );
+
+            ILogger<App> logger = loggerFactory.CreateLogger<App>();
+
             App app = new App(
                 directoryToServe,
-                certificate
+                certificate,
+                logger
             );
 
             // Serve files
-            app.OnRequest("/", (request, response) => {
+            app.OnRequest("/", (request, response, logger) => {
                 response.RenderFileContent("index.gmi");
             });
 
             // Input example
-            app.OnRequest("/input", (request, response) => {
+            app.OnRequest("/input", (request, response, logger) => {
                 if (request.Parameters == null)
                 {
                     response.SetInputHint("Please enter something: ");
@@ -74,7 +83,7 @@ namespace CuipodExample
                 }
             });
 
-            app.OnRequest("/show", (request, response) => {
+            app.OnRequest("/show", (request, response, logger) => {
                 if (request.Parameters == null)
                 {
                     // redirect to input
@@ -89,18 +98,19 @@ namespace CuipodExample
             });
 
             // Or dynamically render content
-            app.OnRequest("/dynamic/content", (request, response) => {
-                response.RenderPlainTextLine("# woah much content!");
-                response.RenderPlainTextLine("More utilities to render content will come soon!");
+            app.OnRequest("/dynamic/content", (request, response, logger) => {
+                response.RenderPlainTextLine("# woah much dynamic content!");
             });
 
             // Optional but nice. In case it is specified and client will do a bad route 
             // request we will respond with Success status and render result from this lambda
-            app.OnBadRequest((request, response) => {
+            app.OnBadRequest((request, response, logger) => {
                 response.RenderPlainTextLine("# Ohh No!!! Request is bad :(");
             });
 
-            return app.Run();
+            app.Run();
+
+            return 0;
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Cuipod
+﻿namespace Cuipod
 {
     public class Request
     {
@@ -10,20 +6,11 @@ namespace Cuipod
         public string Route { get; internal set; }
         public string Parameters { get; internal set; }
 
-        public Request(string baseURL, string route)
+        internal Request(string baseURL, string route, string parameters)
         {
             BaseURL = baseURL;
-
-            int parametersDelimiter = route.IndexOf("?");
-            if (parametersDelimiter != -1)
-            {
-                Parameters = route.Substring(parametersDelimiter + 1);
-                Route = route.Substring(0, parametersDelimiter);
-            } 
-            else
-            {
-                Route = route;
-            }
+            Route = route;
+            Parameters = parameters;
         }
     }
 }

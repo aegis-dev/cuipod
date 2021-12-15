@@ -8,10 +8,10 @@ namespace Cuipod
     {
         public StatusCode Status  { get; set; }
 
-        private string _directoryToServe;
+        private readonly string _directoryToServe;
         private string _requestBody = "";
 
-        public Response(string directoryToServe)
+        internal Response(string directoryToServe)
         {
             _directoryToServe = directoryToServe;
             Status = StatusCode.Success;

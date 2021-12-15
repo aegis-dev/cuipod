@@ -1,12 +1,16 @@
 # cuipod
-Simple yet flexible framework for Gemini protocol servers
-
-Framework is written in C# and based on .NET 5.0 framework. 
-The project is still in very early stage so bugs are expected. Feel free to raise an issue ticket or even raise PR!
+Simple yet flexible framework for Gemini protocol servers written in C# (.NET 5.0)
 
 ## Example 
+For testing purposes you can generate certificate with this command
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout privatekey.key -out certificate.crt
+```
 
 ```csharp
+using System;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Logging;
 using Cuipod;
 
 namespace CuipodExample
@@ -15,19 +19,35 @@ namespace CuipodExample
     {
         static int Main(string[] args)
         {
+            X509Certificate2 cert = CertificateUtils.LoadCertificate(
+                "<dir_with_cert>/certificate.crt",  // Path to certificate
+                "<dir_with_cert>/privatekey.key"    // Path to private Pkcs8 RSA key
+            );
+
+            using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+                builder
+                .AddSimpleConsole(options =>
+                {
+                    options.SingleLine = true;
+                    options.TimestampFormat = "hh:mm:ss ";
+                })
+                .SetMinimumLevel(LogLevel.Debug)
+            );
+            ILogger<App> logger = loggerFactory.CreateLogger<App>();
+
             App app = new App(
-                "<directory_to_serve>/",            // directory to serve 
-                "<dir_with_cert>/certificate.crt",  // path to certificate
-                "<dir_with_cert>/privatekey.key"    // path to private Pkcs8 RSA key
+                "pages/", // Directory to serve
+                certificate,
+                logger
             );
 
             // Serve files
-            app.OnRequest("/", (request, response) => {
+            app.OnRequest("/", (request, response, logger) => {
                 response.RenderFileContent("index.gmi");
             });
 
             // Input example
-            app.OnRequest("/input", (request, response) => {
+            app.OnRequest("/input", (request, response, logger) => {
                 if (request.Parameters == null)
                 {
                     response.SetInputHint("Please enter something: ");
@@ -41,7 +61,7 @@ namespace CuipodExample
                 }
             });
 
-            app.OnRequest("/show", (request, response) => {
+            app.OnRequest("/show", (request, response, logger) => {
                 if (request.Parameters == null)
                 {
                     // redirect to input
@@ -56,19 +76,25 @@ namespace CuipodExample
             });
 
             // Or dynamically render content
-            app.OnRequest("/dynamic/content", (request, response) => {
-                response.RenderPlainTextLine("# woah much content!");
-                response.RenderPlainTextLine("More utilities to render content will come soon!");
+            app.OnRequest("/dynamic/content", (request, response, logger) => {
+                response.RenderPlainTextLine("# woah much dynamic content!");
             });
 
             // Optional but nice. In case it is specified and client will do a bad route 
             // request we will respond with Success status and render result from this lambda
-            app.OnBadRequest((request, response) => {
+            app.OnBadRequest((request, response, logger) => {
                 response.RenderPlainTextLine("# Ohh No!!! Request is bad :(");
             });
 
-            return app.Run();
+            app.Run();
+
+            return 0;
         }
     }
 }
 ```
+
+Full example project is in `CuipodExample` directory
+
+# Contribution
+Feel free to raise an issue ticket or even raise a pull request.
