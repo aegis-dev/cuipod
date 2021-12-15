@@ -356,3 +356,5 @@ CuipodExample/Properties/launchSettings.json
 .hgignore
 
 Cuipod/nuget.config
+
+nuget.config
